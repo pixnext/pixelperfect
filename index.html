@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelPerfect Studio - Digital Photo Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-['Inter'] bg-gray-900 text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i data-lucide="camera" class="w-8 h-8 text-emerald-400"></i>
+                    <span class="font-['Playfair_Display'] text-xl font-bold text-white">PixelPerfect</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#services" class="text-gray-300 hover:text-emerald-400 transition-colors text-sm font-medium">Services</a>
+                    <a href="#products" class="text-gray-300 hover:text-emerald-400 transition-colors text-sm font-medium">Products</a>
+                    <a href="#gallery" class="text-gray-300 hover:text-emerald-400 transition-colors text-sm font-medium">Gallery</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-emerald-400 transition-colors text-sm font-medium">Pricing</a>
+                    <button onclick="toggleCart()" class="relative text-gray-300 hover:text-emerald-400 transition-colors">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button onclick="scrollToCart()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-all transform hover:scale-105">
+                        Place Order
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button onclick="toggleCart()" class="relative text-gray-300">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span id="cart-count-mobile" class="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="text-gray-300 hover:text-white">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 border-t border-gray-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#services" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Services</a>
+                <a href="#products" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Products</a>
+                <a href="#gallery" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Gallery</a>
+                <a href="#pricing" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Pricing</a>
+                <button onclick="scrollToCart(); toggleMobileMenu();" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-emerald-400 hover:text-emerald-300 hover:bg-gray-700">Place Order</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel Section -->
+    <section class="relative h-screen w-full overflow-hidden">
+        <div id="hero-carousel" class="relative h-full w-full">
+            <!-- Slides will be injected by JS -->
+        </div>
+        
+        <!-- Carousel Controls -->
+        <button onclick="prevSlide()" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full backdrop-blur-sm transition-all z-10">
+            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+        </button>
+        <button onclick="nextSlide()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full backdrop-blur-sm transition-all z-10">
+            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+        </button>
+
+        <!-- Hero Content -->
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent flex items-center justify-center z-0">
+            <div class="text-center px-4 max-w-4xl mx-auto mt-20">
+                <h1 class="font-['Playfair_Display'] text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-lg">
+                    Capture Your Perfect Moments
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 font-light drop-shadow-md">
+                    Professional photography services, premium prints, and personalized merchandise
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-full text-lg font-medium transition-all transform hover:scale-105 shadow-lg">
+                        Explore Services
+                    </button>
+                    <button onclick="document.getElementById('gallery').scrollIntoView({behavior: 'smooth'})" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border border-white/30 px-8 py-4 rounded-full text-lg font-medium transition-all">
+                        View Gallery
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Indicators -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10" id="carousel-indicators">
+            <!-- Indicators injected by JS -->
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-['Playfair_Display'] text-4xl md:text-5xl font-bold text-white mb-4">Our Services</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Professional photography solutions tailored to your needs. Select multiple services and add them to your cart.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Cards -->
+                <div class="service-card group bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/10">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="http://static.photos/studio/640x360/1" alt="Photo Shoot" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-emerald-500/20 p-2 rounded-lg">
+                                <i data-lucide="camera" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Photo Shoot</h3>
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm">Professional portrait, family, and commercial photography sessions with expert lighting and direction.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-semibold">From $150</span>
+                            <button onclick="addToCart('service', 'Photo Shoot', 150, 'Professional portrait session')" class="bg-gray-700 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card group bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 hover:transform hover:scale-105">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="http://static.photos/technology/640x360/2" alt="Photo Printing" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-emerald-500/20 p-2 rounded-lg">
+                                <i data-lucide="printer" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Photo Printing</h3>
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm">High-quality prints on premium paper, canvas, and metal. Available in various sizes from 4x6 to poster size.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-semibold">From $25</span>
+                            <button onclick="addToCart('service', 'Photo Printing', 25, 'High-quality photo prints')" class="bg-gray-700 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card group bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 hover:transform hover:scale-105">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="http://static.photos/event/640x360/3" alt="Events" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-emerald-500/20 p-2 rounded-lg">
+                                <i data-lucide="party-popper" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Events Coverage</h3>
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm">Complete photography coverage for Weddings, Birthdays, Corporate events, and special occasions.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-semibold">From $500</span>
+                            <button onclick="addToCart('service', 'Events Coverage', 500, 'Wedding/Birthday event coverage')" class="bg-gray-700 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card group bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 hover:transform hover:scale-105">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="http://static.photos/vintage/640x360/4" alt="Photo Enhancement" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-emerald-500/20 p-2 rounded-lg">
+                                <i data-lucide="wand-2" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Photo Restoration</h3>
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm">Restore old, damaged, or faded photos to their former glory. Colorization of black & white photos available.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-semibold">From $75</span>
+                            <button onclick="addToCart('service', 'Photo Restoration', 75, 'Old photo restoration service')" class="bg-gray-700 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card group bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 hover:transform hover:scale-105">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="http://static.photos/minimal/640x360/5" alt="Framing" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-emerald-500/20 p-2 rounded-lg">
+                                <i data-lucide="frame" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Custom Framing</h3>
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm">Premium quality frames in various styles and materials. UV-protective glass and archival mounting.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-semibold">From $120</span>
+                            <button onclick="addToCart('service', 'Custom Framing', 120, 'Custom photo framing service')" class="bg-gray-700 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-card group bg-gray-800 rounded-2xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 hover:transform hover:scale-105">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="http://static.photos/workspace/640x360/6" alt="Albums" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-emerald-500/20 p-2 rounded-lg">
+                                <i data-lucide="book-open" class="w-5 h-5 text-emerald-400"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Photo Albums</h3>
+                        </div>
+                        <p class="text-gray-400 mb-4 text-sm">Custom designed photo albums with premium leather or linen covers. Perfect for weddings and special events.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-semibold">From $200</span>
+                            <button onclick="addToCart('service', 'Photo Albums', 200, 'Custom photo album creation')" class="bg-gray-700 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-['Playfair_Display'] text-4xl md:text-5xl font-bold text-white mb-4">Personalized Products</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Transform your memories into tangible keepsakes with our custom merchandise.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product Cards -->
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/retail/640x360/7" alt="Coffee Mug" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-3 right-3 bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded">BESTSELLER</div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Custom Photo Mug</h3>
+                        <p class="text-gray-400 text-sm mb-3">11oz ceramic mug with your favorite photo. Dishwasher safe.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$24.99</span>
+                            <button onclick="addToCart('product', 'Custom Photo Mug', 24.99, '11oz ceramic photo mug')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/retail/640x360/8" alt="T-Shirt" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Photo T-Shirt</h3>
+                        <p class="text-gray-400 text-sm mb-3">Premium cotton tee with high-quality photo print. Available in all sizes.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$34.99</span>
+                            <button onclick="addToCart('product', 'Photo T-Shirt', 34.99, 'Premium cotton photo t-shirt')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/minimal/640x360/9" alt="Photo Frame" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Canvas Photo Frame</h3>
+                        <p class="text-gray-400 text-sm mb-3">Gallery-wrapped canvas print with wooden frame. Ready to hang.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$89.99</span>
+                            <button onclick="addToCart('product', 'Canvas Photo Frame', 89.99, 'Gallery-wrapped canvas frame')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/workspace/640x360/10" alt="Phone Case" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute top-3 right-3 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">NEW</div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Custom Phone Case</h3>
+                        <p class="text-gray-400 text-sm mb-3">Protective case with glossy photo finish. All major models supported.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$29.99</span>
+                            <button onclick="addToCart('product', 'Custom Phone Case', 29.99, 'Personalized phone case')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/indoor/640x360/11" alt="Pillow" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Photo Pillow</h3>
+                        <p class="text-gray-400 text-sm mb-3">Soft velvet cushion with double-sided photo print. 16x16 inches.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$39.99</span>
+                            <button onclick="addToCart('product', 'Photo Pillow', 39.99, 'Custom photo pillow 16x16')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/office/640x360/12" alt="Calendar" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Photo Calendar</h3>
+                        <p class="text-gray-400 text-sm mb-3">12-month wall calendar with your custom photos. High-quality paper.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$29.99</span>
+                            <button onclick="addToCart('product', 'Photo Calendar', 29.99, '12-month custom photo calendar')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/studio/640x360/13" alt="Mouse Pad" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Photo Mouse Pad</h3>
+                        <p class="text-gray-400 text-sm mb-3">Non-slip rubber base with vibrant photo print. 9.5x7.5 inches.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$19.99</span>
+                            <button onclick="addToCart('product', 'Photo Mouse Pad', 19.99, 'Custom photo mouse pad')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card bg-gray-900 rounded-xl overflow-hidden border border-gray-700 hover:border-emerald-500/50 transition-all duration-300 group">
+                    <div class="relative h-56 overflow-hidden bg-gray-800">
+                        <img src="http://static.photos/outdoor/640x360/14" alt="Tote Bag" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-2">Photo Tote Bag</h3>
+                        <p class="text-gray-400 text-sm mb-3">Eco-friendly canvas bag with custom photo. Reinforced handles.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-emerald-400 font-bold text-lg">$34.99</span>
+                            <button onclick="addToCart('product', 'Photo Tote Bag', 34.99, 'Custom photo tote bag')" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                                <i data-lucide="shopping-bag" class="w-4 h-4 inline mr-1"></i>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section - Netflix Style -->
+    <section id="gallery" class="py-20 bg-gray-900">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-['Playfair_Display'] text-4xl md:text-5xl font-bold text-white mb-4">Our Gallery</h2>
+                <p class="text-gray-400 text-lg">Browse our portfolio by category</p>
+            </div>
+
+            <!-- Landscape Row -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-white mb-4 px-4 md:px-12">Landscape Photography</h3>
+                <div class="netflix-row">
+                    <button class="netflix-nav prev" onclick="scrollGallery('landscape', -1)">
+                        <i data-lucide="chevron-left" class="w-8 h-8"></i>
+                    </button>
+                    <div class="netflix-container" id="landscape-gallery">
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/21')">
+                            <img src="http://static.photos/nature/640x360/21" alt="Landscape 1">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/22')">
+                            <img src="http://static.photos/nature/640x360/22" alt="Landscape 2">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/23')">
+                            <img src="http://static.photos/nature/640x360/23" alt="Landscape 3">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/24')">
+                            <img src="http://static.photos/nature/640x360/24" alt="Landscape 4">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/25')">
+                            <img src="http://static.photos/nature/640x360/25" alt="Landscape 5">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/26')">
+                            <img src="http://static.photos/nature/640x360/26" alt="Landscape 6">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/27')">
+                            <img src="http://static.photos/nature/640x360/27" alt="Landscape 7">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/nature/640x360/28')">
+                            <img src="http://static.photos/nature/640x360/28" alt="Landscape 8">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="netflix-nav next" onclick="scrollGallery('landscape', 1)">
+                        <i data-lucide="chevron-right" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Portfolio Row -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-white mb-4 px-4 md:px-12">Professional Portfolio</h3>
+                <div class="netflix-row">
+                    <button class="netflix-nav prev" onclick="scrollGallery('portfolio', -1)">
+                        <i data-lucide="chevron-left" class="w-8 h-8"></i>
+                    </button>
+                    <div class="netflix-container" id="portfolio-gallery">
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/31')">
+                            <img src="http://static.photos/people/640x360/31" alt="Portfolio 1">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/32')">
+                            <img src="http://static.photos/people/640x360/32" alt="Portfolio 2">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/33')">
+                            <img src="http://static.photos/people/640x360/33" alt="Portfolio 3">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/34')">
+                            <img src="http://static.photos/people/640x360/34" alt="Portfolio 4">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/35')">
+                            <img src="http://static.photos/people/640x360/35" alt="Portfolio 5">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/36')">
+                            <img src="http://static.photos/people/640x360/36" alt="Portfolio 6">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/37')">
+                            <img src="http://static.photos/people/640x360/37" alt="Portfolio 7">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/38')">
+                            <img src="http://static.photos/people/640x360/38" alt="Portfolio 8">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="netflix-nav next" onclick="scrollGallery('portfolio', 1)">
+                        <i data-lucide="chevron-right" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Family Row -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-white mb-4 px-4 md:px-12">Family & Events</h3>
+                <div class="netflix-row">
+                    <button class="netflix-nav prev" onclick="scrollGallery('family', -1)">
+                        <i data-lucide="chevron-left" class="w-8 h-8"></i>
+                    </button>
+                    <div class="netflix-container" id="family-gallery">
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/41')">
+                            <img src="http://static.photos/people/640x360/41" alt="Family 1">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/event/640x360/42')">
+                            <img src="http://static.photos/event/640x360/42" alt="Family 2">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/43')">
+                            <img src="http://static.photos/people/640x360/43" alt="Family 3">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/event/640x360/44')">
+                            <img src="http://static.photos/event/640x360/44" alt="Family 4">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/people/640x360/45')">
+                            <img src="http://static.photos/people/640x360/45" alt="Family 5">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                        <div class="netflix-item" onclick="openLightbox('http://static.photos/event/640x360/46')">
+                            <img src="http://static.photos/event/640x360/46" alt="Family 6">
+                            <div class="netflix-overlay">
+                                <i data-lucide="maximize-2" class="w-8 h-8"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="netflix-nav next" onclick="scrollGallery('family', 1)">
+                        <i data-lucide="chevron-right" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-['Playfair_Display'] text-4xl md:text-5xl font-bold text-white mb-4">Pricing</h2>
+                <p class="text-gray-400 text-lg">Transparent pricing for all our services and products</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Services Pricing -->
+                <div class="bg-gray-900 rounded-2xl p-8 border border-gray-700">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <i data-lucide="camera" class="text-emerald-400"></i>
+                        Services Pricing
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="pb-3 text-gray-400 font-medium">Service</th>
+                                    <th class="pb-3 text-gray-400 font-medium text-right">Price Range</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Photo Shoot (Portrait)</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$150 - $500</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Events (Wedding)</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$1,500 - $5,000</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Events (Birthday)</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$500 - $1,200</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Photo Restoration</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$75 - $300</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Custom Framing</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$120 - $400</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Photo Albums</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$200 - $800</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 text-white">Photo Printing (per print)</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$25 - $150</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Products Pricing -->
+                <div class="bg-gray-900 rounded-2xl p-8 border border-gray-700">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <i data-lucide="shopping-bag" class="text-emerald-400"></i>
+                        Products Pricing
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="pb-3 text-gray-400 font-medium">Product</th>
+                                    <th class="pb-3 text-gray-400 font-medium text-right">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Custom Photo Mug</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$24.99</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Photo T-Shirt</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$34.99</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Canvas Frame (Small)</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$89.99</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Canvas Frame (Large)</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$149.99</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Phone Case</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$29.99</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Photo Pillow</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$39.99</td>
+                                </tr>
+                                <tr class="border-b border-gray-800">
+                                    <td class="py-4 text-white">Photo Calendar</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$29.99</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 text-white">Photo Tote Bag</td>
+                                    <td class="py-4 text-emerald-400 text-right font-semibold">$34.99</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-6 text-center">
+                <p class="text-emerald-400 text-lg font-medium">
+                    <i data-lucide="info" class="inline w-5 h-5 mr-2"></i>
+                    All prices are starting prices. Final quotes depend on specific requirements and customization.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart / Order Section -->
+    <section id="cart" class="py-20 bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-['Playfair_Display'] text-4xl md:text-5xl font-bold text-white mb-4">Your Order</h2>
+                <p class="text-gray-400 text-lg">Review your selected services and products</p>
+            </div>
+
+            <div class="bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden">
+                <div class="p-6 border-b border-gray-700">
+                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="shopping-cart" class="text-emerald-400"></i>
+                        Cart Items
+                    </h3>
+                </div>
+
+                <div id="cart-items" class="divide-y divide-gray-700 max-h-96 overflow-y-auto">
+                    <!-- Cart items will be injected here -->
+                    <div class="p-8 text-center text-gray-500">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                        <p>Your cart is empty. Add services or products to get started.</p>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-gray-800 border-t border-gray-700">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-gray-400">Total</span>
+                        <span id="cart-total" class="text-3xl font-bold text-emerald-400">$0.00</span>
+                    </div>
+
+                    <form id="order-form" onsubmit="submitOrder(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Full Name</label>
+                                <input type="text" id="customer-name" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                                <input type="email" id="customer-email" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="john@example.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Phone</label>
+                            <input type="tel" id="customer-phone" required class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="+1 (555) 123-4567">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1">Special Requirements / Notes</label>
+                            <textarea id="customer-notes" rows="3" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors" placeholder="Tell us about your specific needs..."></textarea>
+                        </div>
+
+                        <button type="submit" id="submit-order-btn" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-lg transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                            Submit Order via Email
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="camera" class="w-6 h-6 text-emerald-400"></i>
+                        <span class="font-['Playfair_Display'] text-xl font-bold text-white">PixelPerfect Studio</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-md">
+                        Professional photography services capturing life's precious moments. From weddings to portraits, we transform memories into timeless art.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#services" class="hover:text-emerald-400 transition-colors">Services</a></li>
+                        <li><a href="#products" class="hover:text-emerald-400 transition-colors">Products</a></li>
+                        <li><a href="#gallery" class="hover:text-emerald-400 transition-colors">Gallery</a></li>
+                        <li><a href="#pricing" class="hover:text-emerald-400 transition-colors">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                            info@pixelperfect.com
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            +1 (555) 123-4567
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            123 Studio Ave, NY
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">&copy; 2024 PixelPerfect Studio. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-400 hover:text-emerald-400 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-emerald-400 transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-emerald-400 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal (Mobile) -->
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-gray-900 shadow-2xl transform transition-transform duration-300 translate-x-full" id="cart-sidebar">
+            <div class="flex flex-col h-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-800">
+                    <h3 class="text-xl font-bold text-white">Your Cart</h3>
+                    <button onclick="toggleCart()" class="text-gray-400 hover:text-white">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+                <div class="flex-1 overflow-y-auto p-6" id="cart-modal-items">
+                    <!-- Cart items injected here -->
+                </div>
+                <div class="p-6 border-t border-gray-800 bg-gray-800">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-400">Total</span>
+                        <span id="cart-modal-total" class="text-2xl font-bold text-emerald-400">$0.00</span>
+                    </div>
+                    <button onclick="toggleCart(); scrollToCart();" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-lg transition-colors">
+                        Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeLightbox()">
+        <button class="absolute top-4 right-4 text-white/80 hover:text-white p-2" onclick="closeLightbox()">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Gallery Image" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <span id="toast-message">Added to cart!</span>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
